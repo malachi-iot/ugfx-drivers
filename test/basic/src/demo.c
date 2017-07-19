@@ -29,7 +29,7 @@
 
 #include "gfx.h"
 
-int main(void) {
+void demo(void* pvParameters) {
 	coord_t		width, height;
 	coord_t		i, j;
 
