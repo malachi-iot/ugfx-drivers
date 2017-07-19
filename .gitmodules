@@ -1,0 +1,6 @@
+[submodule "ext/framework.abstraction"]
+	path = ext/framework.abstraction
+	url = https://github.com/malachib/framework.abstraction.git
+[submodule "ext/uGFX"]
+	path = ext/uGFX
+	url = https://git.ugfx.io/uGFX/uGFX
