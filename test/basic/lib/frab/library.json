@@ -1,0 +1,18 @@
+{
+    "name": "frab",
+    "keywords": "framework, abstraction, peripheral",
+    "description": "Framework abstractions",
+    "version": "0.1",
+    "repository":
+    {
+        "type": "git",
+        "url": "git@github.com:malachib/framework.abstraction.git"
+    },
+    "build": {
+        "srcFilter": [
+            "+<src/>",
+            "+<src/esp-idf>"
+        ] 
+    },
+    "frameworks": "*"
+}
