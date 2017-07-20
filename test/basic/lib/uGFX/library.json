@@ -10,15 +10,12 @@
     },
     "build": {
         "srcFilter": [
-            "+<src/gfx.c>",
+            "+<src/*>",
             "-<src/gfx_mk.c>",
-            "+<src/*/>",
             "-<src/*/*_mk.c>",
             "-<3rdparty/>",
             "-<boards/>",
             "-<demos/>",
-            "-<drivers/gdisp/QImage>",
-            "-<drivers/ginput/touch/Linux-Event>",
             "-<drivers/>"
         ] 
     },
