@@ -20,13 +20,15 @@ extern "C" {
 
 #endif
 
+void ssd1306_i2c_init_board(GDisplay *g);
+void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd);
+void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length);
 
-// TODO: Turn these back into static GFXINLINE because I'm pretty sure
-//  that's how multi-display systems stay discrete from one another
-// TODO: try to associate this with GDisplay if convenient
 // NOTE: Looks like special allocations need to happen for DMA, as described 
 // here https://esp-idf.readthedocs.io/en/v2.0/api/peripherals/spi_master.html#transaction-data
-void init_board(GDisplay *g);
+static GFXINLINE void init_board(GDisplay *g) {
+    ssd1306_i2c_init_board(g);
+}
 
 static GFXINLINE void post_init_board(GDisplay *g) {
 	(void) g;
@@ -45,9 +47,15 @@ static GFXINLINE void release_bus(GDisplay *g) {
 	(void) g;
 }
 
-void write_cmd(GDisplay *g, uint8_t cmd);
+static GFXINLINE void write_cmd(GDisplay *g, uint8_t cmd)
+{
+    ssd1306_i2c_write_cmd(g, cmd);
+}
 
-void write_data(GDisplay *g, uint8_t* data, uint16_t length);
+static GFXINLINE void write_data(GDisplay *g, uint8_t* data, uint16_t length)
+{
+    ssd1306_i2c_write_data(g, data, length);
+}
 
 #ifdef __cplusplus
 // close extern "C"

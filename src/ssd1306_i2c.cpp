@@ -25,14 +25,14 @@ extern "C" {
 // Address for 128x64 is 0x3D (default) or 0x3C (if SA0 is grounded)
 #endif
 
-extern "C" void init_board(GDisplay *g)
+extern "C" void ssd1306_i2c_init_board(GDisplay *g)
 {
     // FIX: Last remnant of ESP32 specificity
     i2c.config(ESP32_FREQ_HZ);
 }
 
 
-extern "C" void write_cmd(GDisplay *g, uint8_t cmd) 
+extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd) 
 {
     // FIX: Clean up experimental naming
     auto tx = i2c.tx_begin_autocommit_experimental(SSD1306_I2C_ADDRESS);
@@ -41,7 +41,7 @@ extern "C" void write_cmd(GDisplay *g, uint8_t cmd)
     tx.write(cmd);
 }
 
-extern "C" void write_data(GDisplay *g, uint8_t* data, uint16_t length)
+extern "C" void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length)
 {
     auto tx = i2c.tx_begin_autocommit_experimental(SSD1306_I2C_ADDRESS);
 
