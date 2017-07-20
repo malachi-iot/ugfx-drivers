@@ -12,11 +12,7 @@
         "srcFilter": [
             "+<src/*>",
             "-<src/gfx_mk.c>",
-            "-<src/*/*_mk.c>",
-            "-<3rdparty/>",
-            "-<boards/>",
-            "-<demos/>",
-            "-<drivers/>"
+            "-<src/*/*_mk.c>"
         ] 
     },
     "frameworks": "*"
