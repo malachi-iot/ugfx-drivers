@@ -34,8 +34,7 @@ extern "C" void ssd1306_i2c_init_board(GDisplay *g)
 
 extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd) 
 {
-    // FIX: Clean up experimental naming
-    auto tx = i2c.tx_begin_autocommit_experimental(SSD1306_I2C_ADDRESS);
+    auto tx = i2c.get_tx_auto(SSD1306_I2C_ADDRESS);
 
     tx.write(OLED_CONTROL_BYTE_CMD_SINGLE);
     tx.write(cmd);
@@ -43,7 +42,7 @@ extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd)
 
 extern "C" void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length)
 {
-    auto tx = i2c.tx_begin_autocommit_experimental(SSD1306_I2C_ADDRESS);
+    auto tx = i2c.get_tx_auto(SSD1306_I2C_ADDRESS);
 
     tx.write(OLED_CONTROL_BYTE_DATA_STREAM);
     tx.write(data, length, false);
