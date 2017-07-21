@@ -1,0 +1,17 @@
+{
+    "name": "uGFX Drivers",
+    "keywords": "uGFX, graphics, windowing",
+    "description": "Framework abstracted uGFX drivers",
+    "version": "0.1",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/malachi-iot/ugfx-drivers"
+    },
+    "build": {
+        "srcFilter": [
+            "+<src/*.h>"
+        ] 
+    },
+    "frameworks": "*"
+}
