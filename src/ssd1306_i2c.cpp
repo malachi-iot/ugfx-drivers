@@ -6,9 +6,8 @@ extern "C" {
 }
 
 #include "board_SSD1306.h"
-#include <frab/i2c.h>
 #include <frab/frab.h>
-#include <boards/esp-idf/d-duino/ssd1306_i2c.hpp>
+#include <ssd1306_i2c.hpp>
 
 // lifted from https://github.com/yanbe/ssd1306-esp-idf-i2c
 // Control byte
