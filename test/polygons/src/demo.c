@@ -67,6 +67,14 @@ static point oldresult[NUM_POINTS];
 	#error "Either GMISC_NEED_MATRIXFLOAT2D or GMISC_NEED_MATRIXFIXED2D must be defined for this demo"
 #endif
 
+#ifdef COLOR_ENABLED
+#define POLY1_COLOR Blue
+#define POLY2_COLOR Red
+#else
+#define POLY1_COLOR Black
+#define POLY2_COLOR Black
+#endif
+
 
 void demo(void* pvParameters) {
 	coord_t		width, height;
@@ -144,8 +152,8 @@ void demo(void* pvParameters) {
     	//			where the line outline and the filled shape don't match. This is
     	//			expected due to the shapes non-convex nature and was left in the
     	//			demo to demonstrate this exact point.
-    	gdispFillConvexPoly(0, 0, result, NUM_POINTS, Red);
-    	gdispDrawPoly(0, 0, result, NUM_POINTS, Blue);
+    	gdispFillConvexPoly(0, 0, result, NUM_POINTS, POLY1_COLOR);
+    	gdispDrawPoly(0, 0, result, NUM_POINTS, POLY2_COLOR);
 
     	// Make sure the display is updated
     	gdispFlush();

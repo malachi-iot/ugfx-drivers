@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# GFX_OS_NO_INIT needed for FreeRTOS
+
+echo -DGFX_USE_OS_FREERTOS=TRUE -DGFX_OS_NO_INIT=TRUE -Ilib/shim
