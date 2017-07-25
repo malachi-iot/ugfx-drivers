@@ -24,6 +24,14 @@ extern "C" {
 // Address for 128x64 is 0x3D (default) or 0x3C (if SA0 is grounded)
 #endif
 
+// TODO: put these into frab itself, after resolving how it interplays with dummy i2c 
+template <class TOut>
+inline TOut& operator << (TOut& out, uint8_t value)
+{
+    out.write(value);
+    return out;
+}
+
 extern "C" void ssd1306_i2c_init_board(GDisplay *g)
 {
     // FIX: Last remnant of ESP32 specificity
@@ -31,9 +39,16 @@ extern "C" void ssd1306_i2c_init_board(GDisplay *g)
 }
 
 #ifdef SSD1306_REPEAT_START
+// declare tx_t as a i2c transaction type which does not auto-send stop on destruction
 typedef decltype(i2c.get_tx<false>(0)) tx_t;
 
+// use placement helper to manage construction/destruction of i2c transaction 
+// in a static global context
 static framework_abstraction::experimental::placement_helper<tx_t> _tx;
+
+// helper flag so that we can enter START condition immediately
+// NOTE: ironically, *actual* command queued systems like ESP-IDF won't
+// send START condition immediately because ... yes, it's queued
 static bool command_queued;
 
 extern "C" void ssd1306_i2c_acquire_bus(GDisplay* g)
@@ -48,9 +63,10 @@ extern "C" void ssd1306_i2c_release_bus(GDisplay* g)
     _tx.destroy();
 }
 
-static inline tx_t& repeat_start_handler()
+typedef tx_t& tx_handle;
+
+static inline tx_handle get_tx()
 {
-    tx_t& tx = _tx.get();
     if(command_queued)
     {
         // if queued, sends command (destructor)
@@ -59,35 +75,32 @@ static inline tx_t& repeat_start_handler()
         _tx.recycle();
     }
     else
-    {
         command_queued = true;
-    }
+
+    tx_t& tx = _tx;
     tx.addr(SSD1306_I2C_ADDRESS);
     return tx;
 }
+#else
+typedef tx_t tx_handle;
 
+static inline tx_handle get_tx()
+{
+    return i2c.get_tx(SSD1306_I2C_ADDRESS);
+}
 #endif
 
 extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd) 
 {
-#ifdef SSD1306_REPEAT_START
-    tx_t& tx = repeat_start_handler();
-#else
-    auto tx = i2c.get_tx(SSD1306_I2C_ADDRESS);
-#endif
+    tx_handle tx = get_tx();
 
-    tx.write(OLED_CONTROL_BYTE_CMD_SINGLE);
-    tx.write(cmd);
+    tx << OLED_CONTROL_BYTE_CMD_SINGLE << cmd;
 }
 
 extern "C" void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length)
 {
-#ifdef SSD1306_REPEAT_START
-    tx_t& tx = repeat_start_handler();
-#else
-    auto tx = i2c.get_tx(SSD1306_I2C_ADDRESS);
-#endif
+    tx_handle tx = get_tx();
 
-    tx.write(OLED_CONTROL_BYTE_DATA_STREAM);
+    tx << OLED_CONTROL_BYTE_DATA_STREAM;
     tx.write(data, length, false);
 }
