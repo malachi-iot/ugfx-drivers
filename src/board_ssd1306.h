@@ -16,6 +16,9 @@ extern "C" {
 
 #define SSD_1306_TAG "SSD1306"
 
+// TODO: Not ready yet, but close
+//#define SSD1306_REPEAT_START
+
 #ifdef USE_I2C
 
 #endif
@@ -23,6 +26,8 @@ extern "C" {
 void ssd1306_i2c_init_board(GDisplay *g);
 void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd);
 void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length);
+void ssd1306_i2c_acquire_bus(GDisplay* g);
+void ssd1306_i2c_release_bus(GDisplay* g);
 
 // NOTE: Looks like special allocations need to happen for DMA, as described 
 // here https://esp-idf.readthedocs.io/en/v2.0/api/peripherals/spi_master.html#transaction-data
@@ -41,10 +46,16 @@ static GFXINLINE void setpin_reset(GDisplay *g, bool_t state) {
 
 static GFXINLINE void acquire_bus(GDisplay *g) {
 	(void) g;
+#ifdef SSD1306_REPEAT_START
+	ssd1306_i2c_acquire_bus(g);
+#endif
 }
 
 static GFXINLINE void release_bus(GDisplay *g) {
 	(void) g;
+#ifdef SSD1306_REPEAT_START
+	ssd1306_i2c_release_bus(g);
+#endif
 }
 
 static GFXINLINE void write_cmd(GDisplay *g, uint8_t cmd)

@@ -30,10 +30,53 @@ extern "C" void ssd1306_i2c_init_board(GDisplay *g)
     i2c.config(ESP32_FREQ_HZ);
 }
 
+#ifdef SSD1306_REPEAT_START
+// FIX: Incorrect, this flavor auto-queues a stop before send,
+// we'll need the flavor that doesn't do that
+typedef decltype(i2c.get_tx(0)) tx_t;
+
+static framework_abstraction::experimental::placement_helper<tx_t> _tx;
+static bool command_queued;
+
+extern "C" void ssd1306_i2c_acquire_bus(GDisplay* g)
+{
+    command_queued = false;
+    _tx.construct();
+}
+
+extern "C" void ssd1306_i2c_release_bus(GDisplay* g)
+{
+    _tx.get().stop();
+    _tx.destroy();
+}
+
+static inline tx_t& repeat_start_handler()
+{
+    tx_t& tx = _tx.get();
+    if(command_queued)
+    {
+        // if queued, sends command (destructor)
+        // then, restarts the TX and sends a START
+        // no STOP is sent, thus holding the bus 
+        _tx.recycle();
+    }
+    else
+    {
+        command_queued = true;
+    }
+    tx.addr(SSD1306_I2C_ADDRESS);
+    return tx;
+}
+
+#endif
 
 extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd) 
 {
-    auto tx = i2c.get_tx_auto(SSD1306_I2C_ADDRESS);
+#ifdef SSD1306_REPEAT_START
+    tx_t& tx = repeat_start_handler();
+#else
+    auto tx = i2c.get_tx(SSD1306_I2C_ADDRESS);
+#endif
 
     tx.write(OLED_CONTROL_BYTE_CMD_SINGLE);
     tx.write(cmd);
@@ -41,7 +84,11 @@ extern "C" void ssd1306_i2c_write_cmd(GDisplay *g, uint8_t cmd)
 
 extern "C" void ssd1306_i2c_write_data(GDisplay *g, uint8_t* data, uint16_t length)
 {
-    auto tx = i2c.get_tx_auto(SSD1306_I2C_ADDRESS);
+#ifdef SSD1306_REPEAT_START
+    tx_t& tx = repeat_start_handler();
+#else
+    auto tx = i2c.get_tx(SSD1306_I2C_ADDRESS);
+#endif
 
     tx.write(OLED_CONTROL_BYTE_DATA_STREAM);
     tx.write(data, length, false);
