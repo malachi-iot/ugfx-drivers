@@ -31,9 +31,7 @@ extern "C" void ssd1306_i2c_init_board(GDisplay *g)
 }
 
 #ifdef SSD1306_REPEAT_START
-// FIX: Incorrect, this flavor auto-queues a stop before send,
-// we'll need the flavor that doesn't do that
-typedef decltype(i2c.get_tx(0)) tx_t;
+typedef decltype(i2c.get_tx<false>(0)) tx_t;
 
 static framework_abstraction::experimental::placement_helper<tx_t> _tx;
 static bool command_queued;

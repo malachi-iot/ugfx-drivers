@@ -14,10 +14,7 @@ extern "C" {
 
 #define USE_I2C
 
-#define SSD_1306_TAG "SSD1306"
-
-// TODO: Not ready yet, but close
-//#define SSD1306_REPEAT_START
+#define SSD1306_REPEAT_START
 
 #ifdef USE_I2C
 
