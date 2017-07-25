@@ -46,6 +46,45 @@ typedef decltype(i2c.get_tx<false>(0)) tx_t;
 // in a static global context
 static framework_abstraction::experimental::placement_helper<tx_t> _tx;
 
+// TODO: move to a better location (.h file) once it leaves experimental
+// phase
+template <uint8_t address>
+class bus_holder_experimental : 
+    public framework_abstraction::experimental::placement_helper<tx_t>
+{
+    bool command_queued;
+
+public:
+    void acquire()
+    {
+        command_queued = false;
+        construct();
+    }
+
+    void release()
+    {
+        get().stop();
+        destroy();
+    }
+
+    tx_t& get_tx()
+    {
+        if(command_queued)
+        {
+            // if queued, sends command (destructor)
+            // then, restarts the TX and sends a START
+            // no STOP is sent, thus holding the bus 
+            recycle();
+        }
+        else
+            command_queued = true;
+
+        tx_t& tx = get();
+        tx.addr(address);
+        return tx;
+    }
+};
+
 // helper flag so that we can enter START condition immediately
 // NOTE: ironically, *actual* command queued systems like ESP-IDF won't
 // send START condition immediately because ... yes, it's queued
