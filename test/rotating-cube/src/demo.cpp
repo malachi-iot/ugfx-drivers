@@ -24,6 +24,7 @@ extern "C" void demo(void* pvParameters)
     gfxInit();
 
     ugfx::display display;
+    //const ugfx::display::color_context_experimental ctx(display, White);
 
     display.clear();
 
@@ -72,7 +73,6 @@ extern "C" void demo(void* pvParameters)
 
         }
 
-        // project it
         constexpr color_t line_color = White;
 
 
@@ -94,6 +94,7 @@ extern "C" void demo(void* pvParameters)
         display.draw_line(mapx[7],mapy[7],mapx[3],mapy[3], line_color);
 
         display.flush();
+
         // Delay for a while
     	gfxSleepMilliseconds(FRAME_DELAY);
     }
