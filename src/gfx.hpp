@@ -17,6 +17,9 @@ public:
     inline coord_t width() { return gdispGGetWidth(d); }
     inline coord_t height() { return gdispGGetHeight(d); }
 
+    inline uint8_t backlight() { return gdispGGetBacklight(d); }
+    inline uint8_t contrast() { return gdispGGetContrast(d); }
+
     inline void clear(color_t clear_to_color = Black) 
     { gdispGClear(d, clear_to_color); }
 
@@ -24,6 +27,18 @@ public:
     {
         gdispGDrawLine(d, x1, y1, x2, y2, color);
     }
+
+    inline void draw_pixel(coord_t x, coord_t y, color_t color)
+    {
+        gdispGDrawPixel(d, x, y, color);
+    }
+
+#if GDISP_NEED_TEXT == TRUE
+    inline void draw_string(coord_t x, coord_t y, const char *str, font_t font, color_t color)
+    {
+        gdispGDrawString(x, y, str, font, color);
+    }
+#endif
 
     inline void flush() { gdispGFlush(d); }
 
