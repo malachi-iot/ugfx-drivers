@@ -9,10 +9,11 @@
         "url": "https://git.ugfx.io/uGFX/uGFX"
     },
     "build": {
+        "flags": "-Isrc/src/gdisp/mcufont -Isrc",
         "srcFilter": [
-            "+<src/*>",
-            "-<src/gfx_mk.c>",
-            "-<src/*/*_mk.c>"
+            "+<src/src/*>",
+            "-<src/src/gfx_mk.c>",
+            "-<src/src/*/*_mk.c>"
         ] 
     },
     "frameworks": "*"
