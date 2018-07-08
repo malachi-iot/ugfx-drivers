@@ -69,7 +69,5 @@
 #define GMISC_NEED_FIXEDTRIG                         TRUE
 #define GMISC_NEED_MATRIXFIXED2D                     TRUE
 
-#define GDISP_NEED_AUTOFLUSH    TRUE
-
 #endif /* _GFXCONF_H */
 
