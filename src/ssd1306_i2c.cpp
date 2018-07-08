@@ -7,6 +7,9 @@ extern "C" {
 
 #include "board_SSD1306.h"
 #include <frab/frab.h>
+// FIX: Going to need a better way to configure *which* ssd1306_i2c.hpp you want,
+// remember it's the one that points specifically at the addressing for your platform,
+// even though it's -any- ssd1306 and -any- i2c
 #include <board/ssd1306_i2c.hpp>
 
 // lifted from https://github.com/yanbe/ssd1306-esp-idf-i2c
