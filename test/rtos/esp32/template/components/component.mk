@@ -1,0 +1,1 @@
+COMPONENT_SRCDIRS := uGFX/src uGFX-drivers/src framework-abstraction/src
