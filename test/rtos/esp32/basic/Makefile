@@ -6,4 +6,6 @@
 
 PROJECT_NAME := basic
 
+COMPONENT_ADD_INCLUDEDIRS := main/conf/SSD1306-frab
+
 include $(IDF_PATH)/make/project.mk
