@@ -23,16 +23,12 @@
  */
 
 // If need be, we can access IDF-VER ala https://github.com/espressif/ESP8266_RTOS_SDK/blob/master/make/project.mk
-#ifdef OLD_STYLE
-#include "esp_common.h"
-#else
 #include "esp_misc.h"
 #include "esp_sta.h"
 #include "esp_system.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#endif
 
 #include "lwip/sockets.h"
 #include <time.h>
@@ -40,7 +36,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "multicast_config.h"
 
  void demo(void*);
 
@@ -59,7 +54,6 @@ void wifi_event_handler_cb(System_Event_t * event)
     switch (event->event_id) {
         case EVENT_STAMODE_GOT_IP:
             printf("free heap size %d line %d \n", system_get_free_heap_size(), __LINE__);
-            xTaskCreate(demo, "test_task", 2048, NULL, 4, NULL);
             break;
         default:
             break;
@@ -68,6 +62,7 @@ void wifi_event_handler_cb(System_Event_t * event)
     return;
 }
 
+#ifdef CONFIG_WIFI_SSID
 /******************************************************************************
  * FunctionName : wifi_config
  * Description  : wifi_config task
@@ -80,8 +75,8 @@ void wifi_config(void *pvParameters)
     struct station_config sta_config;
     memset(&sta_config, 0, sizeof(struct station_config));
     wifi_set_opmode(STATION_MODE);
-    memcpy(sta_config.ssid, DEMO_WIFI_SSID, strlen(DEMO_WIFI_SSID));
-    memcpy(sta_config.password, DEMO_WIFI_PASSWORD, strlen(DEMO_WIFI_PASSWORD));
+    memcpy(sta_config.ssid, CONFIG_WIFI_SSID, strlen(CONFIG_WIFI_SSID));
+    memcpy(sta_config.password, CONFIG_WIFI_PASSWORD, strlen(CONFIG_WIFI_PASSWORD));
     wifi_station_set_config(&sta_config);
 
     wifi_station_disconnect();
@@ -91,6 +86,7 @@ void wifi_config(void *pvParameters)
         vTaskDelay(10);
     }
 }
+#endif
 
 /******************************************************************************
  * FunctionName : user_rf_cal_sector_set
@@ -148,5 +144,8 @@ void user_init(void)
     printf("SDK version:%s\n", system_get_sdk_version());
 
     wifi_set_event_handler_cb(wifi_event_handler_cb);
+#ifdef CONFIG_WIFI_SSID
     xTaskCreate(wifi_config, "wfcf", 512, NULL, 4, NULL);
+#endif
+    xTaskCreate(demo, "test_task", 2048, NULL, 4, NULL);
 }
