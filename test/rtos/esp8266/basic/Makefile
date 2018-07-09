@@ -6,4 +6,7 @@
 
 PROJECT_NAME := basic
 
+# frab needs this
+EXTRA_CPPFLAGS := -DESP8266
+
 include $(IDF_PATH)/make/project.mk
