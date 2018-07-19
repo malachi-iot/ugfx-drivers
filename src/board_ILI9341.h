@@ -41,16 +41,15 @@ static GFXINLINE void set_backlight(GDisplay *g, uint8_t percent) {
 }
 
 static GFXINLINE void acquire_bus(GDisplay *g) {
-	(void) g;
+	acquire_ili9341_bus(g);
 }
 
 static GFXINLINE void release_bus(GDisplay *g) {
-	(void) g;
+	release_ili9341_bus(g);
 }
 
 static GFXINLINE void write_index(GDisplay *g, uint16_t index) {
-	(void) g;
-	(void) index;
+	write_ili9341_index(g, index);
 }
 
 static GFXINLINE void write_data(GDisplay *g, uint16_t data) {

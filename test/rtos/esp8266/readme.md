@@ -1,0 +1,1 @@
+For the time being, all esp8266 tests are hard wired to ILI9341
