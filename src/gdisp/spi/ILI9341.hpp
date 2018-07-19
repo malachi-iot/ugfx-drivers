@@ -106,7 +106,12 @@ extern "C" void write_ili9341_index(GDisplay *g, uint16_t index)
 }
 
 
-extern "C" void write_ili9341_data(GDisplay *g, uint16_t data);
+extern "C" void write_ili9341_data(GDisplay *g, uint16_t data)
+{
+    spi.write8(data);
+}
+
+
 extern "C" void ili9341_setreadmode(GDisplay *g);
 extern "C" void ili9341_setwritemode(GDisplay *g);
 extern "C" uint16_t ili9341_read_data(GDisplay *g);

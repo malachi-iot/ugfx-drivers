@@ -53,8 +53,7 @@ static GFXINLINE void write_index(GDisplay *g, uint16_t index) {
 }
 
 static GFXINLINE void write_data(GDisplay *g, uint16_t data) {
-	(void) g;
-	(void) data;
+	write_ili9341_data(g, data);
 }
 
 static GFXINLINE void setreadmode(GDisplay *g) {
