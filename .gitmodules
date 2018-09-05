@@ -4,3 +4,12 @@
 [submodule "ext/uGFX"]
 	path = ext/uGFX
 	url = https://git.ugfx.io/uGFX/uGFX
+[submodule "ext/useful-scripts"]
+	path = ext/useful-scripts
+	url = git@gitlab.com:malachi-linux/useful-scripts.git
+[submodule "ext/estdlib"]
+	path = ext/estdlib
+	url = git@github.com:malachi-iot/estdlib.git
+[submodule "ext/mini-printf"]
+	path = ext/mini-printf
+	url = https://github.com/mludvig/mini-printf
