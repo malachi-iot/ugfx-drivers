@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.8)
 project(basic)
 
 set(START_DIR ${CMAKE_CURRENT_LIST_DIR}/start)
-set(EXT_DIR ../../ext)
+set(EXT_DIR ../../../ext)
 
 include(tools/atmel/start/gcc-samd21g18a.cmake)
 
